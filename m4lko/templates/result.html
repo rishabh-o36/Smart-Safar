@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmartSafar Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      scroll-behavior: smooth;
+      color: white;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+    }
+
+    .section {
+      scroll-snap-align: start;
+      min-height: 100vh;
+      padding: 80px 20px;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Transparent navbar */
+.navbar {
+  background: transparent !important;
+  box-shadow: none;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* logo */
+.navbar-brand {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  color: black !important;
+}
+
+.nav-link {
+  font-family: 'Fredoka One', cursive;
+  font-weight: bold;
+  color: black !important;
+  padding: 10px 25px;
+  margin: 0 6px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: black !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+    .glass-card {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      color: white;
+      max-width: 950px;
+      width: 90%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .glass-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 30px rgba(192, 192, 192, 0.6);
+      border: 2px solid rgba(128, 128, 128, 0.4);
+    }
+
+    .glass-card h2 {
+      color: gold;
+      margin-bottom: 15px;
+      font-weight: bolder;
+      font-family: "Arial Black";
+    }
+
+    .glass-card .text-content {
+      flex: 1 1 60%;
+    }
+    /flex-grow, flex-shrink, flex-basis/
+    .img-box {
+      flex: 1 1 35%;
+      text-align: center;
+    }
+
+    .img-box img {
+      max-width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .glass-card:hover .img-box img {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .text-content, .img-box {
+        flex: 1 1 100%;
+      }
+
+      .navbar-nav {
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .nav-link {
+        display: inline-block;
+        margin: 5px 0;
+      }
+    }
+
+.stay-flex-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  max-width: 950px;
+  width: 90%;
+  margin: auto;
+  padding: 30px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.stay-column {
+  flex: 1 1 30%;
+}
+
+.stay-scroll-box {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 10px;
+}
+
+.stay-scroll-box ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+@media (max-width: 768px) {
+  .stay-flex-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+  </style>
+</head>
+
+
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-fluid px-4  image">
+    <a class="navbar-brand" href="{{ url_for('home') }}">
+  <img src="{{ url_for('static', filename='new_logo.png') }}" alt="SmartSafar Logo" style="height: 60px; border-radius: 10px; margin-left: 30px; margin-top: 25px;">
+</a>
+
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon bg-light"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav gap-3">
+        <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="#transport">Transport</a></li>
+        <li class="nav-item"><a class="nav-link" href="#eco">Eco-Tip</a></li>
+        <li class="nav-item"><a class="nav-link" href="#packing">Packing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#attractions">Attractions</a></li>
+        <li class="nav-item"><a class="nav-link" href="#stay">Stay & Parking</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Overview Section -->
+<section id="overview" class="section" style="background-image: url('https://images.pexels.com/photos/9909219/pexels-photo-9909219.jpeg');">
+  <div class="glass-card">
+    <div class="text-content">
+      <h2><i class="fas fa-cloud-sun"></i> Travel Overview</h2>
+      <p><strong>Location:</strong> {{ result.place }}</p>
+      <p><strong>Temperature:</strong> {{ result.predicted_temp_c }}°C / {{ result.predicted_temp_f }}°F</p>
+      <p><strong>Weather:</strong> {{ result.weather_desc }}</p>
+      <p><strong>Suitability:</strong> {{ result.suitability }}</p>
+      <p><strong>Air Quality:</strong> {{ result.air_quality }}</p>
+      <p><strong>Tourist Interest:</strong> {{ result.tourist_interest }}</p>
+      <p><strong>Travel Advice:</strong> {{ result.travel_advice}}</p>
+    </div>
+    <div class="img-box">
+      <img src="/static/weather.jpg" alt="Weather Overview">
+    </div>
+  </div>
+</section>
+
+<!-- Transport Section -->
+<section id="transport" class="section" style="background-image: url('https://images.unsplash.com/photo-1577260382275-88739b8ba8a4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+  <div class="glass-card">
+    <div class="text-content">
+      <h2><i class="fas fa-suitcase-rolling"></i> Transport Suggestions</h2>
+      {% if result.transport_info %}
+        <ul class="list-unstyled">
+          <li><strong>From:</strong> {{ result.transport_info.source }}</li>
+          <li><strong>To:</strong> {{ result.transport_info.destination }}</li>
+          <li><strong>Distance:</strong> {{ result.transport_info.distance_km }}</li>
+          <li><strong>Train Fare:</strong> {{ result.transport_info.train_range }}</li>
+          <li><strong>Bus Fare:</strong> {{ result.transport_info.bus_fare }}</li>
+          <li><strong>Flight Fare:</strong> {{ result.transport_info.flight_fare }}</li>
+        </ul>
+      {% else %}
+        <p>No transport data available for this route.</p>
+      {% endif %}
+    </div>
+    <div class="img-box">
+      <img src="/static/metro.jpeg" alt="Transport">
+    </div>
+  </div>
+</section>
+
+
+<!-- Eco Section -->
+<section id="eco" class="section" style="background-image: url('https://images.pexels.com/photos/886521/pexels-photo-886521.jpeg');">
+  <div class="glass-card">
+    <div class="text-content">
+      <h2><i class="fas fa-leaf"></i> Eco Travel Tips</h2>
+      <ul>
+        {% for tip in result.eco_tips %}
+        <li>{{ tip }}</li>
+        {% endfor %}
+      </ul>
+      <p><strong>Recommended Mode:</strong> Eco-friendly Transport</p>
+    </div>
+    <div class="img-box">
+      <img src="https://images.pexels.com/photos/32588450/pexels-photo-32588450.jpeg" alt="Eco Travel">
+    </div>
+  </div>
+</section>
+
+<!-- Packing Section -->
+<section id="packing" class="section" style="background-image: url('https://images.pexels.com/photos/18054680/pexels-photo-18054680.jpeg');">
+  <div class="glass-card">
+    <div class="text-content">
+      <h2><i class="fas fa-suitcase-rolling"></i> Packing Suggestions</h2>
+      <ul>
+        {% for item in result.packing_list %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="img-box">
+      <img src="/static/packing.jpg" alt="Packing">
+    </div>
+  </div>
+</section>
+
+<!-- Attractions Section -->
+<section id="attractions" class="section" style="background-image: url('https://images.pexels.com/photos/163194/old-retro-antique-vintage-163194.jpeg');">
+  <div class="glass-card">
+    <div class="text-content">
+      <h2><i class="fas fa-map-marked-alt"></i> Top Attractions</h2>
+      <ul>
+        {% for spot in result.famous_destinations %}
+        <li>
+          <strong style="color: peru; font-weight: bolder;">{{ spot.name }}</strong><br>
+          <span>{{ spot.address }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="img-box">
+      <img src="https://imgs.search.brave.com/uCrOsIUdCZivZ1eaj_pC4InWEfK-v5IDKCcGjKHsUpo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c2h1dHRlcnN0b2Nr/LmNvbS9pbWFnZS1w/aG90by9jb2xsYWdl/LWltYWdlcy1mYW1v/dXMtbG9jYXRpb24t/cmFqYXN0aGFuLTI2/MG53LTYyMDIzODUy/Ny5qcGc" alt="Attractions">
+    </div>
+  </div>
+</section>
+
+<!-- Stay Section -->
+<section id="stay" class="section" style="background-image: url('https://images.pexels.com/photos/938580/pexels-photo-938580.jpeg');">
+  <div class="glass-card stay-flex-wrapper">
+
+    <!-- Hotels Column -->
+    <div class="stay-column">
+  <h2><i class="fas fa-hotel"></i>Hotels</h2>
+  <div class="stay-scroll-box">
+    <div class="hotel-list">
+      {% for hotel in result.Hotels %}
+        <div class="hotel-card glassy-shadow">
+          <div class="hotel-header">
+            {% if hotel.url %}
+              <h5>
+                <a href="{{ hotel.url }}" target="_blank" rel="noopener noreferrer" class="hotel-link">
+                  {{ hotel.name }}
+                </a>
+              </h5>
+            {% else %}
+              <h5 class="hotel-name" style="color: peru">{{ hotel.name }}</h5>
+            {% endif %}
+          </div>
+          <div class="hotel-details">
+            <p><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> {{ hotel.address }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+    <!-- Parking Column -->
+    <div class="stay-column">
+      <h2><i class="fas fa-parking"></i> Parking</h2>
+      <div class="stay-scroll-box">
+        <ul>
+          {% for p in result.parking_info %}
+          <li><strong>{{ p.name }}</strong> — {{ p.address }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scripts -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sections = document.querySelectorAll(".section");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    const observerOptions = {
+      root: null,
+      threshold: 0.5,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.getAttribute("id");
+        const navItem = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (entry.isIntersecting) {
+          navLinks.forEach((link) => link.classList.remove("active-nav"));
+          if (navItem) navItem.classList.add("active-nav");
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
+
+    // AQI warning popup
+    const aqiWarning = {{ session.get("aqi_warning") | tojson | safe }};
+    if (aqiWarning && aqiWarning.show_warning) {
+      const userChoice = confirm(`⚠ Warning: Air quality at your destination is worse (AQI ${aqiWarning.dest_aqi}) than your source (AQI ${aqiWarning.source_aqi}).\n\nDo you still want to continue?`);
+      if (!userChoice) {
+        window.location.href = "/";
+      }
+    }
+  });
+</script>
+
+
+</body>
+</html>
